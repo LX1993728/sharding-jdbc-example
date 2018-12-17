@@ -20,6 +20,9 @@ public class OrderItem implements Serializable {
     @JoinColumn(name = "product_id",referencedColumnName = "product_id")
     private Product product;
 
+
+    private Long count; // 订购数量
+
     public Long getOrderId() {
         return orderId;
     }
@@ -44,5 +47,11 @@ public class OrderItem implements Serializable {
         this.product = product;
     }
 
+    public Long getCount() {
+        return count;
+    }
 
+    public void setCount(Long count) {
+        this.count = count;
+    }
 }

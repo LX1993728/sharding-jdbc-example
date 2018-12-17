@@ -8,14 +8,19 @@ import java.io.Serializable;
 public class Product implements Serializable {
     public Product() {
     }
+
+    public Product(Long productId) {
+        this.productId = productId;
+    }
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     private String name; // 产品名称
-
+    private Double price; // 产品价格
     private Long stock; // 库存数量
+
 
     public Long getProductId() {
         return productId;
@@ -41,4 +46,11 @@ public class Product implements Serializable {
         this.stock = stock;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }

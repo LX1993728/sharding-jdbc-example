@@ -23,7 +23,6 @@ public class TestOrderContoller {
         for (int i = 0; i < count; i++) {
             Order order = new Order();
             order.setTotal(100.0);
-            order.setUserId(1L);
             generalService.persisent(order);
         }
         return "success";

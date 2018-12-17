@@ -1,9 +1,6 @@
 package liuxun.jpa.shard.entitys;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -13,7 +10,23 @@ public class OrderItem implements Serializable {
     }
     @Id
     @Column(name = "order_item_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemId;
+
+    @Column(name = "order_id")
+    private Long orderId;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id",referencedColumnName = "product_id")
+    private Product product;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
     public Long getOrderItemId() {
         return orderItemId;
@@ -22,4 +35,14 @@ public class OrderItem implements Serializable {
     public void setOrderItemId(Long orderItemId) {
         this.orderItemId = orderItemId;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+
 }

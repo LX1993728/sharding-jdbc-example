@@ -4,6 +4,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "t_order")
@@ -16,10 +18,13 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-//    @ManyToOne(targetEntity =User.class)
-//    @JoinColumn(name = "user_id")
-//    private User user;
-    private Long userId;
+    @ManyToOne(targetEntity =User.class)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany
+    @JoinColumn(name = "order_id")
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column
     private Double total; // 总金额
@@ -39,11 +44,21 @@ public class Order implements Serializable {
         this.total = total;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+
 }

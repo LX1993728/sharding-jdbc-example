@@ -9,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "t_order")
-public class Order implements Serializable {
-    public Order() {
+public class Orders implements Serializable {
+    public Orders() {
     }
     @Id
     @Column(name = "order_id")
@@ -23,7 +23,6 @@ public class Order implements Serializable {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column

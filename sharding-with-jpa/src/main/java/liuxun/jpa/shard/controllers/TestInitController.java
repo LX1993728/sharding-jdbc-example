@@ -1,6 +1,6 @@
 package liuxun.jpa.shard.controllers;
 
-import liuxun.jpa.shard.entitys.Order;
+import liuxun.jpa.shard.entitys.Orders;
 import liuxun.jpa.shard.entitys.OrderItem;
 import liuxun.jpa.shard.entitys.Product;
 import liuxun.jpa.shard.entitys.User;
@@ -30,8 +30,8 @@ public class TestInitController {
     @GetMapping("/data")
     @Transactional(propagation = Propagation.REQUIRED)
     public Object initData(){
-        //  新建 10个用户  100 个商品 每个用户 订[1-10]个订单 每个订单[1-10]个订单项 每项数量5
 
+        //  新建 10个用户  100 个商品 每个用户 订[1-10]个订单 每个订单[1-10]个订单项 每项数量5
         for (int i = 0; i < 10; i++) {
             User user = new User();
             user.setAddress(i % 2 == 0 ? "北京市海淀区-"+i:"北京市昌平区-"+i);
@@ -46,13 +46,13 @@ public class TestInitController {
             for (int j = 0; j < 10 ; j++) {
                 Product product = new Product();
                 if (j < 3 ){
-                     product.setName("热水壶-"+j);
-                     product.setPrice(30.00 *j);
+                     product.setName("热水壶-"+i+j);
+                     product.setPrice(30.00 *(j+1));
                  }else if( j >=3 && j < 6){
-                    product.setName("格力空调-"+j);
+                    product.setName("格力空调-"+i+j);
                     product.setPrice(255.00 *j);
                  }else {
-                    product.setName("苹果电脑-"+j);
+                    product.setName("苹果电脑-"+i+j);
                     product.setPrice(2543.00 *j);
                  }
                  product.setStock(5000L);
@@ -63,15 +63,22 @@ public class TestInitController {
             //  创建[1-10]之间随机个数的订单数量
             long orderNum = new Random().nextInt(10)+1;
             for (int j = 0; j < orderNum; j++) {
-                Order order = new Order();
+                Orders order = new Orders();
+                order.setUser(user);
+                em.persist(order);  // 先生成一下order_id  因为保存orderItem时必须保证orderItem的分片建order_id不为null
                 // 随机获取订单项的数量
                 long orderItemNum = new Random().nextInt(10)+1;
                 for (int k = 0; k < orderItemNum; k++) {
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setProduct(new Product(product_ids[j]));
+                    Product p = em.find(Product.class,product_ids[j]);
+                    orderItem.setProduct(p);
+                    orderItem.setOrderId(order.getOrderId()); //必须先设置分片键的值
+                    orderItem.setCount(new Random().nextInt( 10)+1L);
                     order.getOrderItems().add(orderItem);
+                    order.setTotal((order.getTotal()==null?0L:order.getTotal())+orderItem.getCount()*orderItem.getProduct().getPrice());
+                    p.setStock(p.getStock()-orderItem.getCount());
+                    em.persist(p);
                 }
-                order.setUser(user);
                 em.persist(order);
             }
 

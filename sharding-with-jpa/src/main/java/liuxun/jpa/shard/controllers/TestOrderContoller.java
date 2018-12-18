@@ -31,4 +31,10 @@ public class TestOrderContoller {
                 .getResultList();
         return resultList;
     }
+
+    @GetMapping("/range")
+    public Object getOrdersByTotalRange(){
+       return em.createQuery("SELECT o FROM Orders o WHERE o.total BETWEEN 400.00 AND 2000.00",Orders.class).getResultList();
+    }
+
 }

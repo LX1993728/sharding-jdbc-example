@@ -81,7 +81,7 @@ public class TestInitController {
                 }
                 em.persist(order);
             }
-
+//           em.flush();
         }
 
         return "success";

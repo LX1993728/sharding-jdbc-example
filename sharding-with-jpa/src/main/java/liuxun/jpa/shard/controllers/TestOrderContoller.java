@@ -1,5 +1,6 @@
 package liuxun.jpa.shard.controllers;
 
+import io.shardingsphere.api.HintManager;
 import liuxun.jpa.shard.entitys.Orders;
 import liuxun.jpa.shard.repository.GeneralService;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -29,12 +32,36 @@ public class TestOrderContoller {
         final List<Orders> resultList = em.createQuery("SELECT o FROM Orders o WHERE o.user.id=:userId", Orders.class)
                 .setParameter("userId",userId)
                 .getResultList();
+        logger.info("++++++++ {}++++++++",resultList.size());
         return resultList;
     }
 
     @GetMapping("/range")
     public Object getOrdersByTotalRange(){
-       return em.createQuery("SELECT o FROM Orders o WHERE o.total BETWEEN 400.00 AND 2000.00",Orders.class).getResultList();
+        List<Orders> list = em.createQuery("SELECT o FROM Orders o WHERE o.total BETWEEN 400.00 AND 2000.00", Orders.class).getResultList();
+        logger.info("++++++++ {}++++++++",list.size());
+        return list;
+    }
+
+    @GetMapping("/count")
+    public Object getCountOfOrder(){
+        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o ", Orders.class);
+
+        List<Orders> resultList=query.getResultList();
+        return resultList.size();
+    }
+
+    @GetMapping("/order")
+    public Object getCountOfOrder(Long orderId){
+//        final Orders orders = em.find(Orders.class, orderId);
+//        return orders;
+
+            TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o where o.orderId=:orderId", Orders.class);
+           query.setParameter("orderId",orderId);
+            List<Orders> resultList=query.getResultList();
+           return resultList;
+
+
     }
 
 }

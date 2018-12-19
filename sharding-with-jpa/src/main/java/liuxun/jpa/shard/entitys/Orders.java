@@ -22,7 +22,7 @@ public class Orders implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column

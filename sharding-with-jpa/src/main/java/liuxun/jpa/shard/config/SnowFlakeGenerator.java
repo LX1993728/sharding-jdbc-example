@@ -64,7 +64,7 @@ public class SnowFlakeGenerator implements KeyGenerator {
         }
 
         sequence = (sequence + 1) & MAX_SEQUENCE;
-//下方的原代码，全部注释，值保留上面一行，解决跨毫秒全为偶数问题
+        //下方的原代码，全部注释，值保留上面一行，解决跨毫秒全为偶数问题
 //        if (currStmp == lastStmp) {
 //            //相同毫秒内，序列号自增
 //            sequence = (sequence + 1) & MAX_SEQUENCE;

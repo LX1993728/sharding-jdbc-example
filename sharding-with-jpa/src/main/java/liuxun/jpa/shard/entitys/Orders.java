@@ -19,7 +19,7 @@ public class Orders implements Serializable {
     private Long orderId;
 
     @ManyToOne(targetEntity =User.class)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "null",value = ConstraintMode.NO_CONSTRAINT))
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)

@@ -17,7 +17,7 @@ public class OrderItem implements Serializable {
     private Long orderId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id",referencedColumnName = "product_id")
+    @JoinColumn(name = "product_id",referencedColumnName = "product_id", foreignKey = @ForeignKey(name = "null",value = ConstraintMode.NO_CONSTRAINT))
     private Product product;
 
 
